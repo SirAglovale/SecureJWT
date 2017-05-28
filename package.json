@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/SirAglovale/SecureJWT/issues"
   },
-  "homepage": "https://github.com/SirAglovale/SecureJWT#readme"
+  "homepage": "https://github.com/SirAglovale/SecureJWT#readme",
+  "dependencies": {
+    "jsonwebtoken": "^7.4.1"
+  }
 }
