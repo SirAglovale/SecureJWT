@@ -13,7 +13,7 @@ Sets the locationt o store sjwt key and (re)generates key.
 * \_path\_: \<string\>
 ### sjwt.generateJWT(payload,fingerprint)
 Returns JsonWebToken with aes256 encrypted payload. See [JsonWebToken](https://www.npmjs.com/package/jsonwebtoken)
-* payload: Any Valid JavaScript
+* payload: \<Object\>|\<Primitive\>|<\Buffer\>
 * fingerprint: \<string\>
 ### sjwt.retrieveJWT(JWTString,fingerprint)
 Returns decrypted payload of JWTString
