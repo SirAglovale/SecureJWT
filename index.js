@@ -6,43 +6,34 @@ var crypto = require("crypto");
 var jwt = require("jsonwebtoken");
 var fs = require("fs");
 
-var mode = "LOCAL_NC";
-var accepted_modes = [
-  "LOCAL_NC",
-  "LOCAL_PATH"
-];
-
 var jwt_key = generateKey();
-var fingerprint = "This is the default fingerprint of sjwt";
 
 module.exports = {
-  //This checks that the mode is valid, and then sets the mode based on this, the default is LOCAL_NC or Local Not Clustered.
-  setMode: (_mode_) => {
-    if(accepted_modes.indexOf(_mode_) > -1)
-    {
-      mode = _mode_;
-      return true;
-    }
-    else
-    {
-      return false;
-    }
+  //This will set the path of the key, this is important in clustered applications as it allows for keysharing
+  setKeyPath: (_path_) => {
+    jwt_key = generateKey(_path_);
   },
-  getMode: () => {
-    return mode;
-  },
-  generateJWT: (payload) => {
+  //This is the function that constructs the JSON web token
+  generateJWT: (payload, fingerprint) => {
+    if(payload === undefined || fingerprint === undefined)
+    {
+      throw new Error("Please use the format: sjwt.generateJWT(payload, fingerprint)");
+    }
     payload = encrypt(payload);
     return jwt.sign(payload, fingerprint);
   },
-  retrieveJWT: (j) => {
+  //This is the function that retrieves the data from the JWT and crypt
+  retrieveJWT: (j, fingerprint) => {
+    if(j === undefined || fingerprint === undefined)
+    {
+      throw new Error("Please use the format: sjwt.retrieveJWT(jwt, fingerprint)");
+    }
     j = jwt.verify(j, fingerprint);
     return decrypt(j);
   }
 }
 
-function encrypt(payload)
-{
+function encrypt(payload) {
   try {
     payload = JSON.stringify(payload);
     var c = crypto.createCipheriv("aes256", Buffer.from(jwt_key.key, "base64"), Buffer.from(jwt_key.iv, "base64"));
@@ -56,8 +47,7 @@ function encrypt(payload)
   }
 }
 
-function decrypt(recieved)
-{
+function decrypt(recieved, fingerprint) {
   try {
     var d = crypto.createDecipheriv("aes256", Buffer.from(jwt_key.key, "base64"), Buffer.from(jwt_key.iv, "base64"));
     var dec = d.update(recieved, "base64", "utf8");
@@ -70,13 +60,16 @@ function decrypt(recieved)
   }
 }
 
-function generateKey()
-{
-  var date = Date();
+function generateKey(_keypath_) {
+  var path = "./.jwt.key";
+  if(_keypath_ != undefined)
+  {
+    path = _keypath_;
+  }
   var key;
   try {
-    fs.statSync("./jwt.key");
-    var key = JSON.parse(fs.readFileSync("./jwt.key"));
+    fs.statSync(path);
+    var key = JSON.parse(fs.readFileSync(path));
     return key;
     console.log("File exists");
   }
@@ -87,7 +80,7 @@ function generateKey()
       key: crypto.randomBytes(32).toString("base64"),
       iv: crypto.randomBytes(16).toString("base64")
     };
-    fs.writeFileSync("./jwt.key", JSON.stringify(data));
+    fs.writeFileSync(path, JSON.stringify(data));
     return data;
   }
 
