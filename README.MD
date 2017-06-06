@@ -40,5 +40,5 @@ var payload = sjwt.retrieveJWT(secureToken,fingerprint); // decrypt payload
 
 /* Inspection */
 console.log(secureToken); // output secureToken to inspect payload
-console.log(payload); // output payload to inspect
+console.log(payload.message); // access payload data
 ```
