@@ -8,12 +8,32 @@ Secure your payloads by adding an extra layer of encryption to your applications
 npm install securejwt
 ```
 ## Usage
-
+### sjwt.setKeyPath(\_path\_)
+Sets the locationt o store sjwt key and (re)generates key.
+* \_path\_: \<string\>
+### sjwt.generateJWT(payload,fingerprint)
+Returns JsonWebToken with aes256 encrypted payload. See [JsonWebToken](https://www.npmjs.com/package/jsonwebtoken)
+* payload: Any Valid JavaScript
+* fingerprint: \<string\>
+### sjwt.retrieveJWT(JWTString,fingerprint)
+Returns decrypted payload of JWTString
+* JWTString: \<string\>
+* fingerprint: \<string\>
+## Full Example
 ```javascript
-var sjwt = require("securejwt");
+var sjwt = require("securejwt"); // require module
 
-sjwt.setMode("LOCAL_NC");
-var x = sjwt.generateJWT("Hello");
-console.log(x);
-console.log(sjwt.retrieveJWT(x));
+/* Variables */
+var keyPath = "~/jwtkeys"; // define keypath
+var payload = { "message" : "hello" }; // define payload
+var fingerprint = "myFingerPrint"; // define fingerprint
+
+/* Methods */
+sjwt.setKeyPath(keyPath); // set key path
+var secureToken = sjwt.generateJWT(payload, fingerprint); // generate secureToken
+var payload = sjwt.retrieve(secureToken,fingerprint); // decrypt payload
+
+/* Inspection */
+console.log(secureToken); // output secureToken to inspect payload
+console.log(payload); // output payload to inspect
 ```
