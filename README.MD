@@ -8,9 +8,9 @@ Secure your payloads by adding an extra layer of encryption to your applications
 npm install securejwt
 ```
 ## Usage
-### sjwt.setKeyPath(path)
+### sjwt.setKeyPath(_path_)
 Sets the locationt o store sjwt key and (re)generates key.
-* path: \<string\>
+* _path_: \<string\>
 ### sjwt.generateJWT(payload,fingerprint)
 Returns JsonWebToken with aes256 encrypted payload. See [JsonWebToken](https://www.npmjs.com/package/jsonwebtoken)
 * payload: Any Valid JavaScript
