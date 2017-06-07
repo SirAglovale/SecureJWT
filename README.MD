@@ -11,12 +11,12 @@ npm install securejwt
 ## Usage
 
 ### sjwt.setKeyPath(\_path\_)
-Sets the locationt o store sjwt key and (re)generates key.
+Sets the location to store sjwt key and (re)generates key.
 * \_path\_: \<string\>
 
 ### sjwt.generateJWT(payload,fingerprint)
 Returns JsonWebToken with aes256 encrypted payload. See [JsonWebToken](https://www.npmjs.com/package/jsonwebtoken)
-* payload: \<Object\>|\<Primitive\>|<\Buffer\>
+* payload: \<Object\>|\<Primitive\>|\<Buffer\>
 * fingerprint: \<string\>
 
 ### sjwt.retrieveJWT(JWTString,fingerprint)
